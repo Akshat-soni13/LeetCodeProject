@@ -65,7 +65,18 @@ const problemSchema = new Schema({
         ref: 'User',
         required:true
 
-    }
+    },
+    refrenceSolution:[
+        {
+            language:{
+                type:String,
+            },
+            completeCode:{
+                type:String,
+            },
+
+        }
+    ]
 }) 
 
 const Problem = mongoose.model('problem',problemSchema);
