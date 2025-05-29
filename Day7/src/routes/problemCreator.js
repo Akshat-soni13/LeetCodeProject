@@ -10,10 +10,9 @@ problemRouter.post("/create",adminMiddleware ,createProblem);
 problemRouter.patch("/update/:id",adminMiddleware ,updateProblem);
 problemRouter.delete("/delete/:id",adminMiddleware,deleteProblem);
 
-
 problemRouter.get("/problemById/:id",userMiddleware,getProblemById);
 problemRouter.get("/getAllProblem",userMiddleware, getAllProblem);
-problemRouter.get("/ProblemSolvedbyuser",userMiddleware,solvedAllProblembyUser);
+// problemRouter.get("/ProblemSolvedbyuser",userMiddleware,solvedAllProblembyUser);
 
 
 module.exports = problemRouter;
@@ -21,3 +20,4 @@ module.exports = problemRouter;
 // fetch
 // update
 // delete 
+                
