@@ -132,7 +132,7 @@ const updateProblem = async (req,res)=>{
   catch(err){
       res.status(500).send("Error: "+err);
   }
-} 
+}
 
 const deleteProblem = async(req,res)=>{
 
@@ -195,6 +195,7 @@ const getAllProblem = async(req,res)=>{
   }
 }
 
+
 const solvedAllProblembyUser =  async(req,res)=>{
    
     try{
@@ -213,6 +214,8 @@ const solvedAllProblembyUser =  async(req,res)=>{
       res.status(500).send("Server Error");
     }
 }
+
+
 
 module.exports = {createProblem,updateProblem,deleteProblem,getProblemById,getAllProblem,solvedAllProblembyUser};
 

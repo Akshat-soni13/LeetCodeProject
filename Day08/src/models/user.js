@@ -32,12 +32,11 @@ const userSchema = new Schema({
         default: 'user'
     },
     problemSolved:{
-        type:[
-            {
-                type:Schema.Types.ObjectId,
-                ref:'problem'
-            }
-        ]
+        type:[{
+            type:Schema.Types.ObjectId,
+            ref:'problem'
+        }],
+        unique:true
     },
     password:{
         type:String,
