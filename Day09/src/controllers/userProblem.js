@@ -1,5 +1,7 @@
 const {getLanguageById,submitBatch,submitToken} = require("../utils/problemUtility");
-const Problem = require("../models/problem")
+const Problem = require("../models/problem");
+const User = require("../models/user");
+const Submission = require("../models/submission");
 
 const createProblem = async (req,res)=>{
 
@@ -155,10 +157,32 @@ const deleteProblem = async(req,res)=>{
   }
 }
 
+
+const getProblemById = async(req,res)=>{
+
+  const {id} = req.params;
+  try{
+     
+    if(!id)
+      return res.status(400).send("ID is Missing");
+
+    const getProblem = await Problem.findById(id).select('_id title description difficulty tags visibleTestCases startCode referenceSolution ');
+   
+   if(!getProblem)
+    return res.status(404).send("Problem is Missing");
+
+
+   res.status(200).send(getProblem);
+  }
+  catch(err){
+    res.status(500).send("Error: "+err);
+  }
+}
+
 const getAllProblem = async(req,res)=>{
 
   try{
-      
+     
     const getProblem = await Problem.find({}).select('_id title difficulty tags');
 
    if(getProblem.length==0)
@@ -172,34 +196,52 @@ const getAllProblem = async(req,res)=>{
   }
 }
 
-const getProblemById = async(req,res)=>{
 
-  const {id} = req.params;
-  try{
-     
-    if(!id)
-      return res.status(400).send("ID is Missing");
-
-    const getProblem = await Problem.findById(id).select('_id title description difficulty tags visibleTestCases startCode referenceSolution ');
+const solvedAllProblembyUser =  async(req,res)=>{
    
-    // only some of chizo ko nahi chaiya then use select me like hiddden test case wala nahi chaiya and baki sab kuch chaiye then select(-hiddenTestCase ) badme hidden test case nahi dikhaga 
+    try{
+       
+      const userId = req.result._id;
 
-   if(!getProblem)
-    return res.status(404).send("Problem is Missing");
+      const user =  await User.findById(userId).populate({
+        path:"problemSolved",
+        select:"_id title difficulty tags"
+      });
+      
+      res.status(200).send(user.problemSolved);
 
+    }
+    catch(err){
+      res.status(500).send("Server Error");
+    }
+}
 
-   res.status(200).send(getProblem);
-  }
-  catch(err){
-    res.status(500).send("Error: "+err);
-  }
+const submittedProblem = async(req,res)=>{
+
+    try{
+
+      const userId =req.result._id;
+      const problemId = req.params.pid;
+
+      const ans = await Submission.find({userId,problemId});
+
+      if(ans.length==0)
+      {
+        res.status(200).send("No Any submission");
+      }
+      res.status(200).send()
+
+    }catch(err)
+    {
+
+      res.status(500).send("Internal Server Error ");
+      
+
+    }
+
 }
 
 
-
-
-
-
-module.exports = {createProblem,updateProblem,deleteProblem,getProblemById,getAllProblem};
+module.exports = {createProblem,updateProblem,deleteProblem,getProblemById,getAllProblem,solvedAllProblembyUser};
 
 

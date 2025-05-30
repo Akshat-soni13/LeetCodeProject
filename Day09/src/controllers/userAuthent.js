@@ -1,5 +1,6 @@
 const redisClient = require("../config/redis");
 const User =  require("../models/user")
+const submission =  require("../models/submission");
 const validate = require('../utils/validator');
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
@@ -98,5 +99,26 @@ const adminRegister = async(req,res)=>{
     }
 }
 
+const deleteProfile = async(req,res)=>{
 
-module.exports = {register, login,logout,adminRegister};
+    try{
+
+        const userId = req.result._id;
+        // user schema se toh delete hogaya
+        await User.findByIdAndDelete(userId);
+
+        // now Submissin se bhi delete krna hoga
+
+        submission.deleteMany({userId});
+
+        res.status(200).send("USer profile Deleted Succefully")
+
+    }catch(err)
+    {
+        res.status(500).send("Server Error Ocuured")
+
+    }
+}
+
+
+module.exports = {register, login,logout,adminRegister,deleteProfile};
